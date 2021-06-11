@@ -8,6 +8,19 @@
 
 ### Config
 
+Add a file called config.yaml
+
 ```yaml
 token: BOT TOKEN
+```
+
+### Running
+
+```bash
+#  Without Docker
+pip install -r requirements.txt
+python -m src
+
+# With Docker
+docker compose up --build
 ```
