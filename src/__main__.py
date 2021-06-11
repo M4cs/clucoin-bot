@@ -125,7 +125,7 @@ async def update_price():
             await role.edit(server=bot.get_guild(833793153131348046), role=role, colour=0x00ff00)
         else:
             await role.edit(server=bot.get_guild(833793153131348046), role=role, colour=0xff0000)
-        await asyncio.sleep(20)
+        await asyncio.sleep(60)
 
 if __name__ == "__main__":
     bot.run(conf.token)
