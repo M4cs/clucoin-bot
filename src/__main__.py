@@ -115,16 +115,17 @@ async def update_price():
             higher = True
         ph.last_price = get_price()
         await bot.get_guild(833793153131348046).get_member(bot.user.id).edit(nick=f"{'⬊' if not higher else '⬈'} {price[2:]}")
-        roles = await bot.get_guild(833793153131348046).fetch_roles()
-        role = None
-        for r in roles:
-            if r.id == 851219215230959617:
-                role = r
-                break
-        if higher:
-            await role.edit(server=bot.get_guild(833793153131348046), role=role, colour=0x00ff00)
-        else:
-            await role.edit(server=bot.get_guild(833793153131348046), role=role, colour=0xff0000)
+        # roles = await bot.get_guild(833793153131348046).fetch_roles()
+        # role = None
+        # for r in roles:
+        #     if r.id == 851219215230959617:
+        #         role = r
+        #         break
+        # if higher:
+        #     await role.edit(server=bot.get_guild(833793153131348046), role=role, colour=0x00ff00)
+        # else:
+        #     await role.edit(server=bot.get_guild(833793153131348046), role=role, colour=0xff0000)
+        logger.warning('We sleeping snore snore')
         await asyncio.sleep(60)
 
 if __name__ == "__main__":
