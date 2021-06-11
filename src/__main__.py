@@ -12,7 +12,8 @@ from logging import getLogger
 logger = getLogger(__name__)
 
 conf = OmegaConf.load('config.yaml')
-
+guild_number = 833793153131348046
+role_id = 851219215230959617
 
 class PriceHold:
     def __init__(self):
@@ -63,17 +64,17 @@ async def on_ready():
         higher = True
     ph.last_price = get_price()
     await bot.change_presence(activity=discord.Activity(type=discord.activity.ActivityType.watching, name=f"24hr: {change:.2f}%"))
-    await bot.get_guild(833793153131348046).get_member(bot.user.id).edit(nick=f"{'⬊' if not higher else '⬈'} {price[2:]}")
-    roles = await bot.get_guild(833793153131348046).fetch_roles()
+    await bot.get_guild(guild_number).get_member(bot.user.id).edit(nick=f"{'⬊' if not higher else '⬈'} {price[2:]}")
+    roles = await bot.get_guild(guild_number).fetch_roles()
     role = None
     for r in roles:
-        if r.id == 851219215230959617:
+        if r.id == guild_number:
             role = r
             break
     if higher:
-        await role.edit(server=bot.get_guild(833793153131348046), role=role, colour=0x00ff00)
+        await role.edit(server=bot.get_guild(guild_number), role=role, colour=0x00ff00)
     else:
-        await role.edit(server=bot.get_guild(833793153131348046), role=role, colour=0xff0000)
+        await role.edit(server=bot.get_guild(guild_number), role=role, colour=0xff0000)
 
 @bot.command('price')
 async def on_price(ctx):
@@ -87,21 +88,21 @@ async def on_price(ctx):
         higher = True
         color = 0x00ff00
     ph.last_price = get_price()
-    await bot.get_guild(833793153131348046).get_member(bot.user.id).edit(nick=f"{'⬊' if not higher else '⬈'} {strprice[2:]}")
+    await bot.get_guild(guild_number).get_member(bot.user.id).edit(nick=f"{'⬊' if not higher else '⬈'} {strprice[2:]}")
     embed = discord.Embed(name="Current Clu Price {'⬊' if not higher else '⬈'}", description=f"{get_price():.12f}", color=color)
     embed.add_field(name="24hr Change", value=f"{get_change():.2f}%")
     embed.add_field(name="7d Change", value=f"{get_7d_change():.2f}%")
     await ctx.reply(embed=embed)
-    roles = await bot.get_guild(833793153131348046).fetch_roles()
+    roles = await bot.get_guild(guild_number).fetch_roles()
     role = None
     for r in roles:
-        if r.id == 851219215230959617:
+        if r.id == role_id:
             role = r
             break
     if higher:
-        await role.edit(server=bot.get_guild(833793153131348046), role=role, colour=0x00ff00)
+        await role.edit(server=bot.get_guild(guild_number), role=role, colour=0x00ff00)
     else:
-        await role.edit(server=bot.get_guild(833793153131348046), role=role, colour=0xff0000)
+        await role.edit(server=bot.get_guild(guild_number), role=role, colour=0xff0000)
     
 
 async def update_price():
@@ -114,7 +115,7 @@ async def update_price():
         if get_price() > ph.last_price:
             higher = True
         ph.last_price = get_price()
-        await bot.get_guild(833793153131348046).get_member(bot.user.id).edit(nick=f"{'⬊' if not higher else '⬈'} {price[2:]}")
+        await bot.get_guild(guild_number).get_member(bot.user.id).edit(nick=f"{'⬊' if not higher else '⬈'} {price[2:]}")
         await asyncio.sleep(60)
 
 if __name__ == "__main__":
