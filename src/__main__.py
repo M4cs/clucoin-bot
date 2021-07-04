@@ -79,14 +79,14 @@ async def on_price(ctx):
         color = 0x00ff00
     ph.last_price = float(info['price'])
     await bot.get_guild(833793153131348046).get_member(bot.user.id).edit(nick=f"{'⬊' if not higher else '⬈'} {info['price'][2:]}")
-    embed = discord.Embed(name="CluCoin Price Info", description=f"{float(info['price']):.12f}", color=color)
+    embed = discord.Embed(title="CluCoin Price Info", description=f"{float(info['price']):.12f}", color=color)
     embed.add_field(name="💸 Price:", value=f"{info['price']}")
-    embed.add_field(name="💱 24hr Change:", value=f"{info['24hr_change']}")
-    embed.add_field(name="📆 Weekly Change:", value=f"{info['7d_change']}")
-    embed.add_field(name="📈 ATH:", value=f"{info['ath']}")
-    embed.add_field(name="💰 Market Cap:", value=f"{info['market_cap']}")
-    embed.add_field(name="💵 Total Supply:", value=f"{info['supply']}")
-    embed.add_field(name="🔥 Total Burnt:", value=f"{info['total_burnt']}")
+    embed.add_field(name="💱 24hr Change:", value=f"{info['24hr_change']:,}")
+    embed.add_field(name="📆 Weekly Change:", value=f"{info['7d_change']:,}")
+    embed.add_field(name="📈 ATH:", value=f"{info['ath']:,}")
+    embed.add_field(name="💰 Market Cap:", value=f"{info['market_cap']:,}")
+    embed.add_field(name="💵 Total Supply:", value=f"{info['supply']:,}")
+    embed.add_field(name="🔥 Total Burnt:", value=f"{info['total_burnt']:,}")
     await ctx.reply(embed=embed)
 
 async def update_price():
