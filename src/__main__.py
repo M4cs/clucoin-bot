@@ -78,7 +78,7 @@ async def on_price(ctx):
         color = 0x00ff00
     ph.last_price = float(info['price'])
     await bot.get_guild(833793153131348046).get_member(bot.user.id).edit(nick=f"{'⬊' if not higher else '⬈'} {info['price'][2:]}")
-    embed = discord.Embed(name="CluCoin Price Info", description=f"{info['price']:.12f}", color=color)
+    embed = discord.Embed(name="CluCoin Price Info", description=f"{float(info['price']):.12f}", color=color)
     embed.add_field(name="💸 Price:", value=f"{info['price']}")
     embed.add_field(name="💱 24hr Change:", value=f"{info['24hr_change']}")
     embed.add_field(name="📆 Weekly Change:", value=f"{info['7d_change']}")
