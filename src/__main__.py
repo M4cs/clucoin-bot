@@ -26,17 +26,6 @@ contract = w3.eth.contract(
     address="0x10ED43C718714eb63d5aA57B78B54704E256024E", abi=ABI
 )
 
-
-def get_change():
-    res = requests.get('https://api.coingecko.com/api/v3/coins/clucoin').json()
-    
-    return float(res.get('market_data').get('price_change_percentage_24h'))
-
-def get_7d_change():
-    res = requests.get('https://api.coingecko.com/api/v3/coins/clucoin').json()
-    
-    return float(res.get('market_data').get('price_change_percentage_7d'))
-
 def get_price():
     amounts = contract.functions.getAmountsOut(
         1000000000,
@@ -52,69 +41,63 @@ def get_price():
     usd = w3.fromWei(amounts[-1], "ether")
     return usd
 
+def get_info():
+    res = requests.get('https://api.coingecko.com/api/v3/coins/clucoin').json()
+    res1 = requests.get('https://api.clucoin.com/v1/data').json()
+    print(res1)
+    price = get_price()
+    return {
+        '24hr_change': float(res.get('market_data').get('price_change_percentage_24h')),
+        '7d_change': float(res.get('market_data').get('price_change_percentage_7d')),
+        'ath': float(res.get('market_data').get('ath').get('usd')),
+        'market_cap': float(res1.get('data').get('market_cap')),
+        'supply': float(res1.get('data').get('supply')),
+        'total_burnt': float(res1.get('data').get('supply')),
+        'price': f'{price:.12f}'
+    }
+
+
 @bot.event
 async def on_ready():
     logger.warning('Started CluCoin Price Bot')
     bot.loop.create_task(update_price())
-    price = f'{get_price():.12f}'
-    change = get_change()
+    info = get_info()
     higher = False
-    if get_price() > ph.last_price:
+    if float(info['price']) > ph.last_price:
         higher = True
-    ph.last_price = get_price()
-    await bot.change_presence(activity=discord.Activity(type=discord.activity.ActivityType.watching, name=f"24hr: {change:.2f}%"))
-    await bot.get_guild(833793153131348046).get_member(bot.user.id).edit(nick=f"{'⬊' if not higher else '⬈'} {price[2:]}")
-    roles = await bot.get_guild(833793153131348046).fetch_roles()
-    role = None
-    for r in roles:
-        if r.id == 851219215230959617:
-            role = r
-            break
-    if higher:
-        await role.edit(server=bot.get_guild(833793153131348046), role=role, colour=0x00ff00)
-    else:
-        await role.edit(server=bot.get_guild(833793153131348046), role=role, colour=0xff0000)
+    ph.last_price = float(info['price'])
+    await bot.change_presence(activity=discord.Activity(type=discord.activity.ActivityType.watching, name=f"24hr: {info['24hr_change']:.2f}%"))
+    await bot.get_guild(833793153131348046).get_member(bot.user.id).edit(nick=f"{'⬊' if not higher else '⬈'} {info['price'][2:]}")
 
 @bot.command('price')
 async def on_price(ctx):
-    change = get_change()
-    await bot.change_presence(activity=discord.Activity(type=discord.activity.ActivityType.watching, name=f"24hr: {change:.2f}% | -price"))
-    price = get_price()
-    strprice = f'{get_price():.12f}'
-    color = 0xff0000
+    info = get_info()
     higher = False
-    if price > ph.last_price:
+    if float(info['price']) > ph.last_price:
         higher = True
         color = 0x00ff00
-    ph.last_price = get_price()
-    await bot.get_guild(833793153131348046).get_member(bot.user.id).edit(nick=f"{'⬊' if not higher else '⬈'} {strprice[2:]}")
-    embed = discord.Embed(name="Current Clu Price {'⬊' if not higher else '⬈'}", description=f"{get_price():.12f}", color=color)
-    embed.add_field(name="24hr Change", value=f"{get_change():.2f}%")
-    embed.add_field(name="7d Change", value=f"{get_7d_change():.2f}%")
+    ph.last_price = float(info['price'])
+    await bot.get_guild(833793153131348046).get_member(bot.user.id).edit(nick=f"{'⬊' if not higher else '⬈'} {info['price'][2:]}")
+    embed = discord.Embed(name="CluCoin Price Info", description=f"{info['price']:.12f}", color=color)
+    embed.add_field(name="💸 Price:", value=f"{info['price']}")
+    embed.add_field(name="💱 24hr Change:", value=f"{info['24hr_change']}")
+    embed.add_field(name="📆 Weekly Change:", value=f"{info['7d_change']}")
+    embed.add_field(name="📈 ATH:", description=f"{info['ath']}")
+    embed.add_field(name="💰 Market Cap:", description=f"{info['market_cap']}")
+    embed.add_field(name="💵 Total Supply:", description=f"{info['supply']}")
+    embed.add_field(name="🔥 Total Burnt:", description=f"{info['total_burnt']}")
     await ctx.reply(embed=embed)
-    roles = await bot.get_guild(833793153131348046).fetch_roles()
-    role = None
-    for r in roles:
-        if r.id == 851219215230959617:
-            role = r
-            break
-    if higher:
-        await role.edit(server=bot.get_guild(833793153131348046), role=role, colour=0x00ff00)
-    else:
-        await role.edit(server=bot.get_guild(833793153131348046), role=role, colour=0xff0000)
-    
 
 async def update_price():
     while True:
         logger.warning('Updating Price Information..')
-        price = f'{get_price():.12f}'
-        change = get_change()
+        info = get_info()
         higher = False
-        await bot.change_presence(activity=discord.Activity(type=discord.activity.ActivityType.watching, name=f"24hr: {change:.2f}% | -price"))
-        if get_price() > ph.last_price:
+        if float(info['price']) > float(ph.last_price):
             higher = True
-        ph.last_price = get_price()
-        await bot.get_guild(833793153131348046).get_member(bot.user.id).edit(nick=f"{'⬊' if not higher else '⬈'} {price[2:]}")
+        ph.last_price = float(info['price'])
+        await bot.change_presence(activity=discord.Activity(type=discord.activity.ActivityType.watching, name=f"24hr: {info['24hr_change']:.2f}%"))
+        await bot.get_guild(833793153131348046).get_member(bot.user.id).edit(nick=f"{'⬊' if not higher else '⬈'} {info['price'][2:]}")
         await asyncio.sleep(60)
 
 if __name__ == "__main__":
