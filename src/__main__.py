@@ -75,7 +75,6 @@ async def on_price(ctx):
     higher = False
     if float(info['price']) > ph.last_price:
         higher = True
-        color = 0x00ff00
     ph.last_price = float(info['price'])
     await bot.get_guild(833793153131348046).get_member(bot.user.id).edit(nick=f"{'⬊' if not higher else '⬈'} {info['price'][2:]}")
     embed = discord.Embed(name="CluCoin Price Info", description=f"{float(info['price']):.12f}", color=color)
