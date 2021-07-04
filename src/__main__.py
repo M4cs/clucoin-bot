@@ -49,7 +49,6 @@ def get_info():
     return {
         '24hr_change': float(res.get('market_data').get('price_change_percentage_24h')),
         '7d_change': float(res.get('market_data').get('price_change_percentage_7d')),
-        'ath': float(res.get('market_data').get('ath').get('usd')),
         'market_cap': float(res1.get('data').get('market_cap')),
         'supply': float(res1.get('data').get('supply')),
         'total_burnt': float(res1.get('data').get('supply')),
@@ -83,7 +82,6 @@ async def on_price(ctx):
     embed.add_field(name="💸 Price:", value=f"{info['price']}")
     embed.add_field(name="💱 24hr Change:", value=f"{info['24hr_change']:,}")
     embed.add_field(name="📆 Weekly Change:", value=f"{info['7d_change']:,}")
-    embed.add_field(name="📈 ATH:", value=f"{info['ath']:,}")
     embed.add_field(name="💰 Market Cap:", value=f"{info['market_cap']:,}")
     embed.add_field(name="💵 Total Supply:", value=f"{info['supply']:,}")
     embed.add_field(name="🔥 Total Burnt:", value=f"{info['total_burnt']:,}")
