@@ -51,7 +51,7 @@ def get_info():
         '7d_change': float(res.get('market_data').get('price_change_percentage_7d')),
         'market_cap': float(res1.get('data').get('market_cap')),
         'supply': float(res1.get('data').get('supply')),
-        'total_burnt': float(res1.get('data').get('supply')),
+        'total_burnt': float(res1.get('data').get('total_burnt')),
         'price': f'{price:.12f}'
     }
 
