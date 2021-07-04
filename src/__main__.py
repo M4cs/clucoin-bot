@@ -83,10 +83,10 @@ async def on_price(ctx):
     embed.add_field(name="💸 Price:", value=f"{info['price']}")
     embed.add_field(name="💱 24hr Change:", value=f"{info['24hr_change']}")
     embed.add_field(name="📆 Weekly Change:", value=f"{info['7d_change']}")
-    embed.add_field(name="📈 ATH:", description=f"{info['ath']}")
-    embed.add_field(name="💰 Market Cap:", description=f"{info['market_cap']}")
-    embed.add_field(name="💵 Total Supply:", description=f"{info['supply']}")
-    embed.add_field(name="🔥 Total Burnt:", description=f"{info['total_burnt']}")
+    embed.add_field(name="📈 ATH:", value=f"{info['ath']}")
+    embed.add_field(name="💰 Market Cap:", value=f"{info['market_cap']}")
+    embed.add_field(name="💵 Total Supply:", value=f"{info['supply']}")
+    embed.add_field(name="🔥 Total Burnt:", value=f"{info['total_burnt']}")
     await ctx.reply(embed=embed)
 
 async def update_price():
