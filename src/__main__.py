@@ -43,7 +43,7 @@ def get_price():
 
 def get_info():
     res = requests.get('https://api.coingecko.com/api/v3/coins/clucoin').json()
-    res1 = requests.get('https://api.clucoin.com/v1/data').json()
+    res1 = requests.get(f'{conf.api_uri}/v1/data').json()
     print(res1)
     price = get_price()
     return {

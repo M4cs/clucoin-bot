@@ -1,0 +1,2 @@
+token: ${oc.env:TOKEN}
+api_uri: ${oc.env:API_URI}
